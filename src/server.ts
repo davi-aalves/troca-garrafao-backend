@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import jwt from "@fastify/jwt";
 import bcrypt from "bcrypt";
 import { authRoutes } from "./routes/auth";
-import { swapRoutes } from "./routes/swaps"; // Importando as rotas de swap
+// import { swapRoutes } from "./routes/swaps"; // Importando as rotas de swap
 
 const app = fastify();
 const prisma = new PrismaClient();
@@ -38,7 +38,7 @@ app.decorate("authenticate", async function (request, reply) {
 app.register(authRoutes);
 
 // Registra as rotas de swap depois da autenticação
-app.register(swapRoutes);
+// app.register(swapRoutes);
 
 // Rota para listar os usuários
 app.get("/users", async () => {

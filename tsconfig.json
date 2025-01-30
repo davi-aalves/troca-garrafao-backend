@@ -2,9 +2,14 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "CommonJS",
-    "rootDir": "./src",
     "outDir": "./dist",
-    "strict": true,
-    "esModuleInterop": true
-  }
+    "rootDir": "./src", // Atualiza o rootDir para src
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "src/**/*", // Inclui todos os arquivos dentro de src
+    "prisma/**/*" // Mantém a inclusão do prisma (se necessário)
+  ]
 }
