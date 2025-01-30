@@ -5,6 +5,15 @@ import bcrypt from "bcrypt";
 const prisma = new PrismaClient();
 
 export async function authRoutes(app: FastifyInstance) {
+  // Registra o método 'authenticate' no Fastify
+  app.decorate("authenticate", async function (request, reply) {
+    try {
+      await request.jwtVerify();
+    } catch (err) {
+      reply.status(401).send({ error: "Token inválido ou ausente" });
+    }
+  });
+
   app.post("/register", async (request, reply) => {
     const { name, email, password, role } = request.body as {
       name: string;

@@ -2,8 +2,9 @@ import fastify from "fastify";
 import cors from "@fastify/cors";
 import { PrismaClient } from "@prisma/client";
 import jwt from "@fastify/jwt";
-import { authRoutes } from "./routes/auth";
 import bcrypt from "bcrypt";
+import { authRoutes } from "./routes/auth";
+import { swapRoutes } from "./routes/swaps"; // Importando as rotas de swap
 
 const app = fastify();
 const prisma = new PrismaClient();
@@ -16,7 +17,28 @@ app.register(jwt, {
   secret: process.env.JWT_SECRET || "supersecret",
 });
 
+// 🚀 Adiciona a função de autenticação globalmente
+app.decorate("authenticate", async function (request, reply) {
+  try {
+    await request.jwtVerify();
+
+    if (
+      !request.user ||
+      typeof request.user !== "object" ||
+      !("id" in request.user)
+    ) {
+      throw new Error("Token inválido");
+    }
+  } catch (err) {
+    reply.status(401).send({ error: "Token inválido ou ausente" });
+  }
+});
+
+// Registra as rotas de autenticação
 app.register(authRoutes);
+
+// Registra as rotas de swap depois da autenticação
+app.register(swapRoutes);
 
 // Rota para listar os usuários
 app.get("/users", async () => {
